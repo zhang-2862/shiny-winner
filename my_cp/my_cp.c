@@ -1,7 +1,7 @@
 #include <func.h>
 #define PAGE_SIZE 4096
 
-int zero_arr[PAGE_SIZE]={0};//用来快速比较空洞
+char zero_arr[PAGE_SIZE]={'\0'};//用来快速比较空洞
                     
 bool ishollow(void* addr,int length){
     if(memcmp(addr,zero_arr, length) == 0){
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
     off_t offset = 0;//已复制的数据大小
 
     while(offset < size){
-        off_t length;
+        int length = 0;
         if (size - offset >= PAGE_SIZE) {
             length = PAGE_SIZE;
         }else {
@@ -45,17 +45,13 @@ int main(int argc, char* argv[])
             error(1, errno, "mmap %s", argv[1]);
         }
 
-        void* addr2 = mmap(NULL, length, PROT_READ | PROT_WRITE, MAP_SHARED, dst_fd, offset);
+        void* addr2 = mmap(NULL, length, PROT_READ | PROT_WRITE , MAP_SHARED, dst_fd, offset);
         if (addr2 == MAP_FAILED){
-            error(1, errno, "map %s", argv[2]);
+            error(1, errno, "mmap %s", argv[2]);
         }
-        if(ishollow(addr1,length)){
-            offset += length;
-            continue;
+        if(!ishollow(addr1,length)){
+            memcpy(addr2, addr1, length);
         }
-
-        memcpy(addr2, addr1, length);
-        offset += length;
 
         if(munmap(addr1,length)) {
             error(1,errno,"munmap %s",argv[1]);
@@ -63,6 +59,7 @@ int main(int argc, char* argv[])
         if(munmap(addr2,length)) {
             error(1,errno,"munmap %s",argv[2]);
         }
+        offset += length;
     }
     close(src_fd);
     close(dst_fd);
