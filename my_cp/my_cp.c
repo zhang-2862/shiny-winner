@@ -49,6 +49,7 @@ int main(int argc, char* argv[])
         if (addr2 == MAP_FAILED){
             error(1, errno, "mmap %s", argv[2]);
         }
+        
         if(!ishollow(addr1,length)){
             memcpy(addr2, addr1, length);
         }
