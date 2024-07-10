@@ -1,13 +1,16 @@
-SRCS := $(wildcard *.c)
-OUTS := $(patsubst *.c,%,$(SRCS))
+Srcs := $(wildcard *.c)
+Outs := $(patsubst %.c, %, $(Srcs))
+
 CC := gcc
-CFLAGS := -Wall -g
-.PHONY: clean rebuild all
+CFLAGS = -Wall -g
 
-All: $(OUTS)
-% : %.C
-	$(CC) $^ -o $@ $(CFLAGS)
+ALL: $(Outs) 
+
+%: %.c
+	$(CC) $< -o $@ $(CFLAGS)
+
+.PHONY: clean rebuild ALL
+
 clean:
-	$(RM) $(OUTS)
-
+	$(RM) $(Outs)
 rebuild: clean ALL
