@@ -58,8 +58,8 @@ int main(int argc, char* argv[]) {
     
     long long ret1;
     long long ret2;
-    pthread_join(tid1, (void*)&ret1);
-    pthread_join(tid2, (void*)&ret2);
+    pthread_join(tid1, (void**)&ret1);
+    pthread_join(tid2, (void**)&ret2);
 
     //printf("sum = %lld\n", ret1 + ret2);
     printf("sum1 = %lld\n", ret1);
