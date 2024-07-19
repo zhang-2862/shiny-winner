@@ -45,7 +45,7 @@ void threadpool_destroy(ThreadPool* pool) {
     free(pool);
 }
 
-int main(int agrc, char* argv[]) {
+int main(int argc, char* argv[]) {
     time_t start_t = time(NULL);
     // 1.创建线程池，并初始化
     ThreadPool* pool = threadpool_create(20);
