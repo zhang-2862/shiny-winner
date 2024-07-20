@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
         if (ret == -1) {
             error(1, errno, "listen");
         }
-        printf("server is listening.\n");
+        printf("server is listening...\n");
         
         struct sockaddr_in clientaddr;
         memset(&clientaddr, 0, sizeof(clientaddr));
@@ -44,7 +44,7 @@ int main(int argc, char* argv[]) {
                             (struct sockaddr*)&clientaddr, &len);
         
         printf("peerfd: %d\n", peerfd);
-        printf("client addr: %s:%d\n",
+        printf("client addr: %s:%d has connected.\n",
                inet_ntoa(clientaddr.sin_addr),
                ntohs(clientaddr.sin_port));
 

@@ -24,17 +24,32 @@ int main(int argc, char* argv[]) {
     }
     printf("connect success.\n");
 
-    char buff[100] = {0};// 初始化
+    char send_buf[1000] = {0};// 初始化
+    char recv_buf[1000] = {0};
     
+    for (;;) {
+        // 从键盘读取消息
+        ret = read(STDIN_FILENO, send_buf, sizeof(send_buf));
+        if (ret == -1) {
+            error(1, errno, "read message");
+        }
 
-    char msg[] = "hello,server";
-    ret = send(clientfd, msg, strlen(msg), 0);
-    printf("send %d bytes.\n", ret);
+        // 将结尾的换行符去除
+        ret = send(clientfd, send_buf, strlen(send_buf) - 1, 0);
+        if (ret) {
+            error(1, errno, "send message");
+        }
+        printf("send %d bytes.\n", ret);
 
-    ret = recv(clientfd, buff, sizeof(buff), 0);
-    printf("recv %d bytes.\n", ret);
-    printf("recv: %s\n", buff);
-    close(clientfd);
+        ret = recv(clientfd, recv_buf, sizeof(recv_buf), 0);
+        if (ret) {
+            error(1, errno, "recv message");
+        }
+        printf("recv: %s\n", recv_buf);
+        printf("recv %d bytes.\n", ret);
+
+        close(clientfd);
+    }
 
     return 0;
 }
