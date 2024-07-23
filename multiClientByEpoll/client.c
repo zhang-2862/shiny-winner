@@ -12,8 +12,8 @@ int main(int argc, char* argv[]) {
     struct sockaddr_in serveraddr;
     memset(&serveraddr, 0, sizeof(serveraddr));
     serveraddr.sin_family = AF_INET;
-    serveraddr.sin_port = htons(8888);
-    serveraddr.sin_addr.s_addr = inet_addr("192.168.142.129");
+    serveraddr.sin_port = htons(8080);
+    serveraddr.sin_addr.s_addr = inet_addr("192.168.71.128");
 
     // 连接服务器
 
