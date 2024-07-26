@@ -74,13 +74,11 @@ int main(int argc, char* argv[]) {
             "Content-Type: image/jpeg\r\n"
             "Content-Lenth: "; 
         const char* emptyLine = "\r\n";
-        const char* body = "<html><head>This is a picture</head></html";
-        sprintf(response,"%s%s%ld\r\n%s%s",
+        sprintf(response,"%s%s%ld\r\n%s",
                 startline,
                 headers,
-                strlen(body) + (long)file_size, //body加上文件大小
-                emptyLine,
-                body);
+                (long)file_size, //文件大小
+                emptyLine);
         send(peerfd, response, strlen(response), 0);
 
         // 发送图片
