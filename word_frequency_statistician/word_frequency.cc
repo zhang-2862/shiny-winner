@@ -61,22 +61,25 @@ void Dictionary::read(const string& filename) {
             continue;
         }
         // 遍历字典中是否已存在该单词，若存在则词频加1
-        auto result = std::find_if(_dict.begin(), _dict.end(),
-                           [&word](const auto& item) {return word == item._word;});
-        if (result != _dict.end()) {
-            ++result->_frequency;
-        } else {
-            _dict.emplace_back(word, 1);
-        }
-        /* auto it = _dict.begin(); */
-        /* while ((it = _dict.begin()) != _dict.end()) { */
-        /*     if (word == it->_word) { */
-        /*         it->_frequency++; */
-        /*         break; */
-        /*     } */
+        /* auto result = std::find_if(_dict.begin(), _dict.end(), */
+        /*                    [&word](const auto& item) {return word == item._word;}); */
+        /* if (result != _dict.end()) { */
+        /*     ++result->_frequency; */
+        /* } else { */
+        /*     _dict.emplace_back(word, 1); */
         /* } */
-        /* // 字典中不存在，在添加该单词 */
-        /* _dict.push_back({word, 1}); */
+        auto it = _dict.begin();
+        while (it != _dict.end()) {
+            if (word == it->_word) {
+                it->_frequency++;
+                break;
+            }
+            ++it;
+        }
+        // 字典中不存在，在添加该单词
+        if (it == _dict.end()){
+            _dict.push_back({word, 1});
+        }
     }
     /* for (auto& e : _dict) { */
     /*     cout << e._word << " " << e._frequency << endl; */
