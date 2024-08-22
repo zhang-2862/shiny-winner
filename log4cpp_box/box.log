@@ -4,3 +4,21 @@
 2024-08-21 17:44:28,049 categ [WARN] msg[log4cpp_box.cc:warn:99]
 2024-08-21 17:44:29,705 categ [ERROR] msg[log4cpp_box.cc:error:93]
 2024-08-21 17:44:29,705 categ [WARN] msg[log4cpp_box.cc:warn:99]
+2024-08-22 10:38:08,235 categ [ERROR] msg[log4cpp_box.cc:error:95]
+2024-08-22 10:38:08,235 categ [WARN] msg[log4cpp_box.cc:warn:101]
+2024-08-22 10:38:17,955 categ [ERROR] msg[log4cpp_box.cc:error:95]
+2024-08-22 10:38:17,955 categ [WARN] msg[log4cpp_box.cc:warn:101]
+2024-08-22 10:38:29,367 categ [ERROR] msg[log4cpp_box.cc:error:95]
+2024-08-22 10:38:29,367 categ [WARN] msg[log4cpp_box.cc:warn:101]
+2024-08-22 10:42:36,468 categ [ERROR] msg[log4cpp_box.cc:error:95]
+2024-08-22 10:42:36,468 categ [WARN] msg[log4cpp_box.cc:warn:100]
+2024-08-22 10:45:54,487 categ [ERROR] The log is error message[log4cpp_box.cc:error:95]
+2024-08-22 10:45:54,488 categ [WARN] The log is warn message[log4cpp_box.cc:warn:100]
+2024-08-22 14:15:48,839 categ [ERROR] The log is error message
+2024-08-22 14:15:48,839 categ [WARN] [log4cpp_box.cc:test1:176]The log is warn message
+2024-08-22 14:20:57,832 categ [ERROR] [log4cpp_box.cc:test0:145]The log is info message
+2024-08-22 14:20:57,832 categ [FATAL] [log4cpp_box.cc:test0:146]The log is info message
+2024-08-22 14:20:57,832 categ [CRIT] [log4cpp_box.cc:test0:147]The log is info message
+2024-08-22 14:23:05,155 categ [ERROR] [log4cpp_box.cc:test0:145]The log is info message
+2024-08-22 14:23:05,155 categ [FATAL] [log4cpp_box.cc:test0:146]The log is info message
+2024-08-22 14:23:05,155 categ [CRIT] [log4cpp_box.cc:test0:147]The log is info message

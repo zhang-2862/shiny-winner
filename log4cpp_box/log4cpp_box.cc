@@ -4,6 +4,40 @@
 #include <log4cpp/FileAppender.hh>
 #include <log4cpp/RollingFileAppender.hh>
 #include <log4cpp/PatternLayout.hh>
+#include <string>
+using std::string;
+#define addPrefix(msg) string("[").append(__FILE__)\
+    .append(":").append(__func__)\
+    .append(":").append(std::to_string(__LINE__))\
+    .append("]").append(msg).c_str()
+
+#define logEmerg(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logFatal(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logAlert(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logCrit(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logError(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logWarn(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logNotice(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logInfo(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
+#define logDebug(msg) Mylogger::getInstance()\
+    ->warn(addPrefix(msg))
+
 using namespace log4cpp;
 
 class Mylogger {
@@ -27,11 +61,13 @@ private:
 
 private:
     static Mylogger* _pMylogoger;
-    Category& _category = Category::getInstance("categ");
+    Category& _category; 
 };
 Mylogger* Mylogger::_pMylogoger = nullptr;
 
-Mylogger::Mylogger() {
+Mylogger::Mylogger()
+    :_category(Category::getInstance("categ"))
+{
     // 创建布局器
     PatternLayout* ptn1 = new PatternLayout();
     ptn1->setConversionPattern("%d %c [%p] %m%n");
@@ -63,105 +99,52 @@ void Mylogger::destroy() {
     }
 }
 
-inline 
 void Mylogger::emerg(const char *msg) {
-    _category.emerg("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.emerg(msg);
 }
 
-inline 
 void Mylogger::fatal(const char *msg) {
-    _category.fatal("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.fatal(msg);
 }
 
-inline 
 void Mylogger::alert(const char *msg) {
-    _category.alert("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.alert(msg);
 }
 
-inline 
 void Mylogger::crit(const char *msg) {
-    _category.crit("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.crit(msg);
 }
 
-inline 
 void Mylogger::error(const char *msg) {
-    _category.error("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.error(msg);
 }
 
-inline 
 void Mylogger::warn(const char *msg) {
-    _category.warn("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.warn(msg);
 }
 
-inline 
 void Mylogger::notice(const char *msg) {
-    _category.notice("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.notice(msg);
 }
 
-inline 
 void Mylogger::info(const char *msg) {
-    _category.info("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.info(msg);
 }
 
-inline 
 void Mylogger::debug(const char *msg) {
-    _category.debug("msg[%s:%s:%d]",
-                    __FILE__,__func__, __LINE__);
+    _category.debug(msg);
 }
 
-void logEmerg(const char* msg) {
-    Mylogger::getInstance()->emerg(msg);
-}
-
-void logFatal(const char* msg) {
-    Mylogger::getInstance()->fatal(msg);
-}
-
-void logAlert(const char* msg) {
-    Mylogger::getInstance()->alert(msg);
-}
-
-void logCrit(const char* msg) {
-    Mylogger::getInstance()->crit(msg);
-}
-
-void logError(const char* msg) {
-    Mylogger::getInstance()->error(msg);
-}
-
-void logWarn(const char* msg) {
-    Mylogger::getInstance()->warn(msg);
-}
-
-void logNotice(const char* msg) {
-    Mylogger::getInstance()->notice(msg);
-}
-
-void logInfo(const char* msg) {
-    Mylogger::getInstance()->info(msg);
-}
-
-void logDebug(const char* msg) {
-    Mylogger::getInstance()->debug(msg);
-}
 
 void test0()
 {
     //第一步，完成单例模式的写法
     Mylogger *log = Mylogger::getInstance();
 
-    log->info("The log is info message");
-    log->error("The log is error message");
-    log->fatal("The log is fatal message");
-    log->crit("The log is crit message");
+    log->info(addPrefix("The log is info message"));
+    log->error(addPrefix("The log is info message"));
+    log->fatal(addPrefix("The log is info message"));
+    log->crit(addPrefix("The log is info message"));
 
     Mylogger::destroy();
 }
@@ -180,7 +163,7 @@ void test1()
 }
 
 int main(int argc, char* argv[]) {
-    test1();
+    test0();
     /* Category::shutdownForced(); */
     return 0;
 }

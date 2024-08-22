@@ -57,17 +57,19 @@ private:
 };
 
 Complex operator+(const Complex& lhs, const Complex& rhs) {
-    Complex complex;
-    complex._real = lhs._real + rhs._real;
-    complex._imag = lhs._imag + rhs._imag;
-    return complex;
+    /* Complex complex; */
+    /* complex._real = lhs._real + rhs._real; */
+    /* complex._imag = lhs._imag + rhs._imag; */
+    /* return complex; */
+    return Complex(lhs._real + rhs._real, lhs._imag + lhs._imag);
 }
 
 Complex operator-(const Complex& lhs, const Complex& rhs) {
-    Complex complex;
-    complex._real = lhs._real - rhs._real;
-    complex._imag = lhs._imag - rhs._imag;
-    return complex;
+    /* Complex complex; */
+    /* complex._real = lhs._real - rhs._real; */
+    /* complex._imag = lhs._imag - rhs._imag; */
+    /* return complex; */
+    return Complex(lhs._real - rhs._real, lhs._imag - lhs._imag);
 }
 
 std::ostream& operator<<(std::ostream& os, const Complex& rhs) {
