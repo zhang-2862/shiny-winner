@@ -114,7 +114,7 @@ bool operator<(const String& lhs, const String& rhs) {
 }
 
 bool operator>(const String& lhs, const String& rhs) {
-    return !(lhs < rhs);
+    return strcmp(lhs._pstr, rhs._pstr) > 0;
 }
 	
 bool operator<=(const String& lhs, const String& rhs) {
