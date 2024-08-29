@@ -18,16 +18,19 @@ class CowString{
             if (_idx <_pCows.size()) {
                 if (_pCows.use_count() > 1) {
                     // 原字符串引用计数-1
-                    --*(int*)(_pCows._pstr - kRefcountLength);
+                    /* --*(int*)(_pCows._pstr - kRefcountLength); */
+                    _pCows.decreaseRefcount();
 
                     char* temp =
                         /* new char[strlen(_pCows._pstr)]() +4 ; */
-                        new char[_pCows.size() + 1 + kRefcountLength]() + kRefcountLength;
+                        /* new char[_pCows.size() + 1 + kRefcountLength]() + kRefcountLength; */
+                        _pCows.malloc(_pCows._pstr);
                     strcpy(temp, _pCows._pstr);
                     // 更改_pCows指向
                     _pCows._pstr = temp;
                     // 初始化引用计数
-                    *(int*)(_pCows._pstr - kRefcountLength) = 1;
+                    _pCows.initRefcount();
+                    /* *(int*)(_pCows._pstr - kRefcountLength) = 1; */
                 }
                 // 修改字符
                 _pCows._pstr[_idx] = c;
@@ -36,6 +39,10 @@ class CowString{
                 static char nullchar = '\0';
                 return nullchar;
             }
+        }
+        CharProxy& operator=(const CharProxy& rhs) {
+            _pCows._pstr[_idx] = rhs._pCows._pstr[rhs._idx];
+            return *this;
         }
 
         operator char() {
@@ -175,6 +182,15 @@ void test01() {
     cout << "ref_count: " << str1.use_count() << endl;
 }
 
+void test02() {
+    CowString str1("hello");
+    CowString str2("world");
+    CowString str3("thanks");
+    str1[0] = str2[0]; 
+    cout << str1 << " " << str2 << endl;
+
+}
+
 int main(void) {
-    test01();
+    test02();
 }
