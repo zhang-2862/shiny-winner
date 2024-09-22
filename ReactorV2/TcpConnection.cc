@@ -59,3 +59,48 @@ InetAddress TcpConnection::getPeerAddr() {
     return addr;
     
 }
+
+void TcpConnection::setNewConnectionCallback(const TcpConnectionCallback& cb) {
+    onNewConnection_ = cb;
+}
+
+void TcpConnection::setCloseCallback(const TcpConnectionCallback& cb) {
+    onClose_ = cb;
+} 
+
+void TcpConnection::setMessageCallback(const TcpConnectionCallback& cb) {
+    onMessage_ = cb;
+}
+
+void TcpConnection::handleNewConnectionCallback() {
+    if (onNewConnection_) {
+        onNewConnection_(shared_from_this());
+    } else {
+        perror("onNewConnection_ == nullptr");
+    }
+}
+
+void TcpConnection::handleCloseCallback() {
+    if (onClose_) {
+        onClose_(shared_from_this());
+    } else {
+        perror("onClose_ == nullptr");
+    }
+}
+
+void TcpConnection::handleMessageCallback() {
+    if (onMessage_) {
+        onMessage_(shared_from_this());
+    } else {
+        perror("onMessage_ == nullptr");
+    }
+
+}
+
+bool TcpConnection::isClosed() {
+    // 看是否能读取到数据，若可以则未关闭,返回值为0，则连接已断开
+    char buf[1] = {0};
+    int nByte = recv(sock_.getFd(), buf, 1, MSG_PEEK);
+    return nByte == 0;
+}
+

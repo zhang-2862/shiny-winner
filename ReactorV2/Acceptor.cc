@@ -57,3 +57,8 @@ void Acceptor::listen() {
         return;
     }
 }
+
+// 提供获取listenfd的接口供EventLoop类使用
+int Acceptor::fd() {
+    return sock_.getFd();
+}
