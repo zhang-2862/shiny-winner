@@ -13,7 +13,10 @@ EventLoop::EventLoop(Acceptor& acceptor)
       evtList_(1024),
       isLooping_(false),
       acceptor_(acceptor),
-      conns_()
+      conns_(),
+      evtfd_(createEventFd()),
+      pending_(),
+      mutex_()
 {
     // 监听listenfd
     addEpollReadFd(acceptor_.fd());
@@ -59,6 +62,7 @@ void EventLoop::waitEpollFd() {
             } else if (sockfd == evtfd_) {
                 if (evtList_[i].events & EPOLLIN) {
                     handleRead();// 等待Threadpool处理完任务发送信号
+                    perror("------------------send msg------");
                     doPengdingFunctors();// 将处理好的数据发送给客户端
                 }
             } else {
@@ -154,8 +158,8 @@ void EventLoop::setCloseCallback(TcpConnectionCallback&& cb) {
 
 void EventLoop::wakeup() {
     uint64_t one = 1;
-    ssize_t ret = write(evtfd_, &one, sizeof(one));
-    if (ret != sizeof(one)) {
+    ssize_t ret = write(evtfd_, &one, sizeof(uint64_t));
+    if (ret != sizeof(uint64_t)) {
         perror("handleRead error");
         return;
     }
@@ -163,24 +167,24 @@ void EventLoop::wakeup() {
 
 void EventLoop::handleRead() {
     uint64_t one = 1;
-    ssize_t ret = read(evtfd_, &one, sizeof(one));
-    if (ret != sizeof(one)) {
+    ssize_t ret = read(evtfd_, &one, sizeof(uint64_t));
+    if (ret != sizeof(uint64_t)) {
         perror("handleRead error");
         return;
     }
 }
 
 int EventLoop::createEventFd() {
-    int ret = eventfd(0,0);
+    int ret = eventfd(10,0);
     if (ret == -1) {
         perror("createEpollFd error");
         return -1;
-    } else {
-        return ret;
-    }
+    } 
+    return ret;
 }
 
 void EventLoop::doPengdingFunctors() {
+    perror("doPengdingFunctors is called.");
     vector<Functor> temp;
     {
         std::lock_guard<mutex> lg(mutex_);
@@ -193,9 +197,11 @@ void EventLoop::doPengdingFunctors() {
 }
 
 void EventLoop::runInLoop(Functor&& cb) {
+    perror("runInLoop is called.");
     {
         std::lock_guard<mutex> lg(mutex_);
         pending_.emplace_back(std::move(cb));
     }
+    printf("pending_.size(): %ld\n", pending_.size());
     wakeup();
 }
