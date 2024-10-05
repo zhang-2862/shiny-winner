@@ -80,6 +80,12 @@ int main() {
         10, // 最大重试次数
         httpCallback // 回调函数
     );
+
+    // 找到请求
+    protocol::HttpRequest *req  = httpTask->get_req();
+    req->set_method("POST");
+    req->set_request_uri("/?wd=123");
+    req->add_header_pair("MyName", "Workflow");
     
     // 用户把任务交给框架,之后由框架执行http任务
     httpTask->start();  
