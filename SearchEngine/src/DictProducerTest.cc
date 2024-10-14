@@ -1,11 +1,15 @@
 #include "DictProducer.hh"
+#include "SplitToolCppJieba.hh"
 
 int main(int argc, char* argv[]) {
-    DictProducer dictProducer("data/eng_copus");
+    SplitToolCppJieba cppjieba;
+    DictProducer dictProducer("data/eng_copus",
+                              "data/cn_copus",
+                              &cppjieba);
     dictProducer.storeDict("data/dict.dat");
     dictProducer.storeIndex("data/dictIndex.dat");
     /* dictProducer.printDict(); */
-    dictProducer.printIndex();
+    /* dictProducer.printIndex(); */
     return 0;
 }
 

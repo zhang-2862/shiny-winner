@@ -1,6 +1,7 @@
 #include "DirScanner.hh"
 
 #include <dirent.h>
+#include <iostream>
 
 DirScanner::DirScanner() {
 
@@ -20,6 +21,11 @@ vector<string>& DirScanner::files() {
 
 void DirScanner::traverse(const string& dirname) {
     DIR* dirp = opendir(dirname.c_str());
+    if (!dirp) {
+        std::cerr << "Failed to open directory: " << dirname << "\n";
+        return;
+    }
+
     dirent* direntp; 
     while ((direntp = readdir(dirp)) != nullptr) {
         string d_name = direntp->d_name;
@@ -29,4 +35,5 @@ void DirScanner::traverse(const string& dirname) {
         string path = dirname + "/" + direntp->d_name;
         files_.push_back(path);
     }
+    closedir(dirp);
 }
