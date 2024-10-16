@@ -25,8 +25,6 @@ void PageLib::create() {
     auto map = Configuration::getInstance()->configMap();
     string pagelib_path = map["pagelib_PATH"];
 
-    /* cerr << "pagelib_path: " << pagelib_path << "\n"; */
-
     dirScanner_(pagelib_path); // 创建目录扫描器
 
     // 打开rapepage文件，用来存储处理好的xml文档
@@ -71,20 +69,29 @@ void PageLib::create() {
 
         while (itemNode) {
             // 使用 std::string 来存储文本内容
-            string title = itemNode->FirstChildElement("title") ? itemNode->FirstChildElement("title")->GetText() : "N/A";
-            string link = itemNode->FirstChildElement("link") ? itemNode->FirstChildElement("link")->GetText() : "N/A";
-            string content = itemNode->FirstChildElement("description") ? itemNode->FirstChildElement("description")->GetText() : "N/A";
+            std::string title = itemNode->FirstChildElement("title") 
+                ? itemNode->FirstChildElement("title")->GetText() 
+                : "N/A";
+            std::string link = itemNode->FirstChildElement("link") 
+                ? itemNode->FirstChildElement("link")->GetText() 
+                : "N/A";
+            std::string content = itemNode->FirstChildElement("description") 
+                ? itemNode->FirstChildElement("description")->GetText() 
+                : "N/A";
 
-            std::regex reg("<[^>]+>"); // 定义去除多余元素的规则
+            std::regex reg("<[^>]+>");//通用正则表达式
             content = regex_replace(content, reg, "");
+            if (isAllWhitespace(content)) { // 如果过滤后内容全为空白符则将title赋值给content
+                content = title;
+            }
 
             // 存入rapepage中
             pos = ofs.tellp();
             ofs << "<doc>\n\t<docid>" << idx 
-                << "</docid>\n\t<title>" << title 
-                << "</title>\n\t<link>" << link 
-                << "</link>\n\t<content>" << content
-                << "</content>\n</doc>";
+                << "</docid>\n\t<title><![CDATA[" << title 
+                << "]]></title>\n\t<link><![CDATA[" << link 
+                << "]]></link>\n\t<content><![CDATA[" << content
+                << "]]></content>\n</doc>";
             ofs << '\n';
             length = static_cast<int>(ofs.tellp()) - pos;
             offsetLib_[idx++] = {pos, length};
@@ -103,14 +110,20 @@ void PageLib::store() {
     // 打开网页偏移库文件
     ofstream ofs(pageoffset_path);
     if (!ofs) {
-        cerr << "open rapepage failed.\n";
+        cerr << "open pageoffset failed.\n";
         return;
     }
     for (auto& e : offsetLib_) {
-        ofs << e.first <<" "
+        ofs << e.first << " "
             << e.second.first << " "
             << e.second.second << "\n";
     }
     ofs.close();
+}
+
+bool PageLib::isAllWhitespace(const string& str) {
+    return std::all_of(str.begin(), str.end(), [](unsigned char c) {
+        return std::isspace(c);
+    });
 }
 

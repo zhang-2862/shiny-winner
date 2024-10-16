@@ -6,16 +6,16 @@ using std::string;
 
 class WebPage {
 public:
-    WebPage(string& doc);
+    WebPage();
     ~WebPage();
 
+    void setDoc(const string& doc);
     string doc();
     int docId();
     string docTitle(); 
     string docUrl();
     string docContent();
 
-private:
     void parseXml(); //解析doc
 
 

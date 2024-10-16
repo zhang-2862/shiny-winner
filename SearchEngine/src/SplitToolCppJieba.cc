@@ -28,7 +28,7 @@ vector<string> SplitToolCppJieba::cut(const string& sentence) {
                           STOP_WORD_PATH);
     vector<string> words;
     
-    jieba.Cut(sentence, words, true);
+    jieba.Cut(sentence, words, false);
 
     return words;
 }

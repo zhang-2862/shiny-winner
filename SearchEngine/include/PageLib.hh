@@ -17,6 +17,8 @@ public:
 
     void create();
     void store();
+private:
+    bool isAllWhitespace(const string& str);
 
 private:
     DirScanner& dirScanner_;

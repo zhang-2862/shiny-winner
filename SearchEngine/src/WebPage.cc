@@ -6,14 +6,17 @@
 
 using std::cerr;
 
-WebPage::WebPage(string& doc)
-    : doc_(doc)
+WebPage::WebPage()
 {
-    parseXml(); //解析文本
+
 }
 
 WebPage::~WebPage() {
 
+}
+
+void WebPage::setDoc(const string& doc) {
+    doc_ = doc;
 }
 
 string WebPage::doc() { return doc_; };
@@ -33,7 +36,8 @@ void WebPage::parseXml() {
     // 从字符串加载XML
     tinyxml2::XMLError eResult = doc.Parse(doc_.c_str());
     if (eResult != tinyxml2::XML_SUCCESS) {
-        cerr << "Error: Unable to parse XML string!\n";
+        /* cerr << "Error: Unable to parse XML string!\n"; */
+        cerr << "Error: Unable to parse XML string: \n" << doc_ << "\n";
         return;
     }
 

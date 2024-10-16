@@ -1,4 +1,4 @@
-all: ConfigTest.exe DirScannerTest.exe DictProducerTest.exe test_jieba.exe PageLibTest.exe
+all: ConfigTest.exe DirScannerTest.exe DictProducerTest.exe test_jieba.exe PageLibTest.exe WebPageTest.exe PageLibPreprocessorTest.exe
 
 # 生成 DictProducerTest.exe
 DictProducerTest.exe: bin/DictProducer.o bin/DictProducerTest.o bin/DirScanner.o bin/Configuration.o bin/SplitTool.o bin/SplitToolCppJieba.o 
@@ -6,7 +6,7 @@ DictProducerTest.exe: bin/DictProducer.o bin/DictProducerTest.o bin/DirScanner.o
 
 # 生成 ConfigTest.exe
 ConfigTest.exe: bin/Configuration.o bin/ConfigTest.o
-	g++ bin/Configuration.o bin/ConfigTest.o -o configTest.exe
+	g++ bin/Configuration.o bin/ConfigTest.o -o ConfigTest.exe
 
 # 生成 DirScannerTest.exe
 DirScannerTest.exe: bin/DirScanner.o bin/DirScannerTest.o
@@ -19,6 +19,14 @@ test_jieba.exe: bin/test_jieba.o
 # 生成PageLibTest.exe
 PageLibTest.exe: bin/PageLib.o bin/PageLibTest.o bin/tinyxml2.o bin/Configuration.o bin/DirScanner.o
 	g++ bin/PageLib.o bin/PageLibTest.o bin/tinyxml2.o bin/Configuration.o bin/DirScanner.o -o PageLibTest.exe
+
+# 生成WebPageTest.exe
+WebPageTest.exe: bin/WebPage.o bin/tinyxml2.o bin/WebPageTest.o
+	g++ bin/WebPage.o bin/tinyxml2.o bin/WebPageTest.o -o WebPageTest.exe
+
+# 生成PageLibPreprocessorTest.exe
+PageLibPreprocessorTest.exe: bin/PageLibPreprocessor.o bin/Configuration.o bin/WebPage.o bin/SplitTool.o bin/SplitToolCppJieba.o bin/tinyxml2.o bin/PageLibPreprocessorTest.o
+	g++ bin/PageLibPreprocessor.o bin/Configuration.o bin/WebPage.o bin/SplitTool.o bin/SplitToolCppJieba.o bin/tinyxml2.o bin/PageLibPreprocessorTest.o -o PageLibPreprocessorTest.exe
 
 # 编译 DictProducer.o
 bin/DictProducer.o: src/DictProducer.cc include/DictProducer.hh
@@ -53,7 +61,7 @@ bin/SplitTool.o: src/SplitTool.cc include/SplitTool.hh
 	g++ -c src/SplitTool.cc -o bin/SplitTool.o -g -I include
 
 # 编译 SplitToolCppJieba.o
-bin/SplitToolCppJieba.o: src/SplitToolCppJieba.cc include/SplitToolCppJieba.hh
+bin/SplitToolCppJieba.o: src/SplitToolCppJieba.cc include/SplitToolCppJieba.hh include/cppjieba/Jieba.hpp
 	g++ -c src/SplitToolCppJieba.cc -o bin/SplitToolCppJieba.o -g -I include
 
 # 编译 PageLibTest.o
@@ -69,16 +77,21 @@ bin/tinyxml2.o: src/tinyxml2.cc include/tinyxml2.h
 	g++ -c src/tinyxml2.cc -o bin/tinyxml2.o -g -I include
 
 # 编译 WebPage.o
-bin/WebPage.o: src/WebPage.cc include/WebPage.hh
+bin/WebPage.o: src/WebPage.cc include/WebPage.hh 
 	g++ -c src/WebPage.cc -o bin/WebPage.o -g -I include
 
 # 编译 PageLibPreprocessor.o
-bin/PageLibPreprocessor.o: src/PageLibPreprocessor.cc bin/PageLibPreprocessor.hh
+bin/PageLibPreprocessor.o: src/PageLibPreprocessor.cc include/PageLibPreprocessor.hh include/simhash/Simhasher.hpp
 	g++ -c src/PageLibPreprocessor.cc -o bin/PageLibPreprocessor.o -g -I include
 	
+# 编译 WebPageTest.o: src/WebPageTest.cc 
+bin/WebPageTest.o: src/WebPageTest.cc
+	g++ -c src/WebPageTest.cc -o bin/WebPageTest.o -g -I include
 
+# 编译 PageLibPreprocessorTest.o
+bin/PageLibPreprocessorTest.o: src/PageLibPreprocessorTest.cc
+	g++ -c src/PageLibPreprocessorTest.cc -o bin/PageLibPreprocessorTest.o -g -I include
 	
-
 # 清理目标文件
 clean:
 	rm -f bin/*.o ConfigTest.exe dirScanner.exe DictProducerTest.exe PageLibTest.exe
