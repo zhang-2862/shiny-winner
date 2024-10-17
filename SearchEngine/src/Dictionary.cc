@@ -25,10 +25,13 @@ Dictionary* Dictionary::getInstance() {
 vector<pair<string, int>> Dictionary::doQuery(const string& str) {
     vector<pair<string, int>> res; //把相关词集存储
     
-    // TODO 根据单字查询所有相关词
-    set<int> word_set = index_[word];    
-    for (const auto& e : word_set) { // 按照行号查相关词放入词集
-        res.push_back(dict_[e]);
+    // 根据单字查询所有相关词
+    vector<string> seperateChs{getWord(str)};
+    for (const auto& ele : seperateChs) {
+        set<int> word_set = index_[ele];    
+        for (const auto& e : word_set) { // 按照行号查相关词放入词集
+            res.push_back(dict_[e]);
+        }
     }
     return res;
 }

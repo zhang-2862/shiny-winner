@@ -1,5 +1,9 @@
 #include "Echoserver.h"
 #include "TcpConnection.h"
+#include "SplitToolCppJieba.hh"
+#include "Tlv.hh"
+#include "KeyRecommender.hh"
+#include "WebPageSearcher.hh"
 
 #include <iostream>
 #include <functional>
@@ -17,8 +21,18 @@ MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
 void MyTask::process()
 {
     //所有的业务逻辑全部在该函数中进行处理
+    SplitToolCppJieba cutTool;
+    vector<char> buffer(_msg.begin(), _msg.end());
+    Message message = Deserialize(buffer); 
+    if (message.type == kKeyword) {
+        KeyRecommender key_recom(message.data, _con);
+        key_recom.response(); // 在response中会调用 _con->sendInLoop(_msg);
+    } else if (message.type == kKeySentence) {
+        WebPageSearcher web_searcher(message.data, _con, &cutTool);
+        web_searcher.response(); // 在response中会调用 _con->sendInLoop(_msg);
+    }
     //处理完毕之后需要将数据发出去
-    _con->sendInLoop(_msg);
+    /* _con->sendInLoop(_msg); */
 }
 
 Echoserver::Echoserver(size_t threadNum, size_t queSize

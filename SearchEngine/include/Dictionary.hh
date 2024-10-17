@@ -34,7 +34,7 @@ private:
     ~Dictionary() = default;
     Dictionary(const Dictionary&) = delete;
     Dictionary& operator=(const Dictionary&) =delete;
-    void queryIndex();
+    /* void queryIndex(); */
     int distance(string candidate);
     void init(string dict_path, string index_path);
     vector<string> getWord(const string& str); // 获取分字
